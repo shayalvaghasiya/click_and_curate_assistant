@@ -3,6 +3,7 @@ from django.db import models
 class Category(models.Model):
     """Represents a pre-defined product category."""
     name = models.CharField(max_length=100, unique=True)
+    urls = models.URLField(max_length=1024, blank=True, null=True)
     
     def __str__(self):
         return self.name
