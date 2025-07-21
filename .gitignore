@@ -1,3 +1,59 @@
-venv/
+# Byte-compiled / optimized / DLL files
 __pycache__/
+*.py[cod]
+*$py.class
 *.pyc
+*.pyo
+*.sqlite3
+
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+media/
+staticfiles/  # If you collect static files locally
+.env          # If using environment variables
+*.pot         # If using Django translations
+
+# If using Django's default SQLite DB and local media
+*.sqlite3
+
+# Python virtualenv
+venv/
+ENV/
+env/
+.venv/
+.Python
+
+# VSCode
+.vscode/
+
+# PyCharm
+.idea/
+
+# MacOS
+.DS_Store
+
+# Coverage reports
+htmlcov/
+.coverage
+coverage.xml
+*.cover
+.cache
+
+# Testing
+.tox/
+.pytest_cache/
+nosetests.xml
+test.db
+
+# Migrations (optional: only ignore if you generate them fresh often)
+# **/migrations/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
