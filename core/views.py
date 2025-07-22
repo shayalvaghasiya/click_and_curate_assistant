@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 import requests
 from decouple import config
 
-from pinterest.sdk.pinterest_api_client import PinterestApiClient
+# from pinterest.sdk.pinterest_api_client import PinterestApiClient
 
 import google.generativeai as genai
 from .models import Category, Product, PinIdea
@@ -155,11 +155,11 @@ class PublishPinView(APIView):
         
     
         try:
-            api_client = PinterestApiClient(
-                    app_id=config('PINTEREST_APP_ID'),
-                    app_secret=config('PINTEREST_APP_SECRET'),
-                    # refresh_token=config('PINTEREST_REFRESH_TOKEN'), # Add this to .env later
-                )
+            # api_client = PinterestApiClient(
+            #         app_id=config('PINTEREST_APP_ID'),
+            #         app_secret=config('PINTEREST_APP_SECRET'),
+            #         # refresh_token=config('PINTEREST_REFRESH_TOKEN'), # Add this to .env later
+            #     )
 
             print("--- SIMULATING PINTEREST POST ---")
             print(f"Board ID: {config('PINTEREST_BOARD_ID')}")
