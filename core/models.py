@@ -21,8 +21,8 @@ class Product(models.Model):
 class PinIdea(models.Model):
     """Represents a curated Pin, ready to be posted."""
     product = models.OneToOneField(Product, on_delete=models.CASCADE)
-    ai_title = models.CharField(max_length=255)
-    ai_description = models.TextField()
+    pin_title = models.CharField(max_length=255)
+    pin_description = models.TextField()
     affiliate_link = models.URLField(max_length=1024)
     is_approved = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)

@@ -3,8 +3,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 import requests
 from decouple import config
+
+from pinterest.sdk.pinterest_api_client import PinterestApiClient
+
 import google.generativeai as genai
-from .models import Category
+from .models import Category, Product, PinIdea
 from .serializers import CategorySerializer, ProductSerializer
 from .scrapper import bestseller_scrapper
 from django.shortcuts import get_object_or_404
@@ -118,3 +121,54 @@ class Generate_PinContent(APIView):
         }
 
         return Response(pin_idea, status=status.HTTP_200_OK)
+
+
+class PublishPinView(APIView):
+    """Receive a complete pin idea, save in database, and post on pinterest"""
+
+    def post(self, request, *args, **kwargs):
+        pin_data = request.data
+        product_data = pin_data.get('product')
+
+        # save in database
+        try:
+            category = Category.objects.get(id=product_data['category'])
+            product,_ = Product.objects.update_or_create(
+                asin = product_data['asin'],
+                defaults={
+                    'category' : category,
+                    'title' : product_data['title'],
+                    'image_url' : product_data['image_url']
+                }
+            ) 
+            pin_idea, _ = PinIdea.objects.update_or_create(
+                product = product, 
+                defaults={
+                    'pin_title': pin_data['pin_title'],
+                    'pin_description': pin_data['pin_description'],
+                    'affiliate_link': pin_data['affiliate_link'],
+                    'is_approved': True,
+                }
+            )
+        except Exception as e:
+            return Response({"error":f"Database error: {e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+    
+        try:
+            api_client = PinterestApiClient(
+                    app_id=config('PINTEREST_APP_ID'),
+                    app_secret=config('PINTEREST_APP_SECRET'),
+                    # refresh_token=config('PINTEREST_REFRESH_TOKEN'), # Add this to .env later
+                )
+
+            print("--- SIMULATING PINTEREST POST ---")
+            print(f"Board ID: {config('PINTEREST_BOARD_ID')}")
+            print(f"Title: {pin_idea.pin_title}")
+            print(f"Link: {pin_idea.affiliate_link}")
+            print(f"Image URL: {product.image_url}")
+            print("---------------------------------")
+            
+            return Response({"message": "Pin published successfully (simulation)."}, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            return Response({"error": f"Pinterest API error: {e}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
